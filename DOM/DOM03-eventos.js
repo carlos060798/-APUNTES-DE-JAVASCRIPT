@@ -28,3 +28,19 @@ busqueda.addEventListener("blur",(e)=>{ console.log("me activo cuando me quitan 
 busqueda.addEventListener("input",(e)=>{ console.log(e)}) 
 
 // EVENTO SUBMIT
+
+let formulario =doc.querySelector("#formulario");
+
+
+formulario.addEventListener("submit",(e)=>{
+    event.preventDefault();
+    alert('buscando')
+    console.log(e)
+});
+
+
+// eventos de scroll con el mouse
+
+window.addEventListener("scroll",(e)=>{ 
+    let scroll = window.scrollY;
+    console.log(scroll);})
