@@ -49,9 +49,44 @@ let carro=[
 // verificar si un elemto  esta dentro de un array
 let existeINCLUIDES=mesees.includes("enero") 
 console.log(existeINCLUIDES)
-//verificar si un elemento esta en una array  de objetos
+
+// Some verificar si un elemento  del array cumple con la condicion dada 
 let existesome=carro.some(producto=>{return producto.name==="fcoca"})
 console.log(existesome)
 
+//devuelve  el indice del elemto que se busca por referencia
+let existe2=mesees.findIndex(producto=>  producto==="marzo") 
+existe2=carro.findIndex(producto=>{return  producto.name==="coca"})
+console.log(existe2)
+
+//reduce  para  reducir un array aun solo valor
+
+let  reducion=carro.reduce((total,producto)=> total+producto.precio,0)
+console.log(reducion)
 
 
+//filter  devuelve un array con los elemetos que cumplan con los valores de referencia
+let productos=[
+    {name:'coca',precio:100},
+    {name:'mota',precio:150},
+    {name:'maricachafa',precio:200},
+    {name:'poper',precio:300},
+    {name:'tusi',precio:150},
+    {name:'lsd',precio:250},
+]
+
+let filtro1= productos.filter(product=> product.precio<200)
+ console.log(filtro1) 
+
+
+ // find devuelve  un nuevo array con  elemento de referencia
+ let filtro2= productos.find(product=> product.precio<200)
+ console.log(filtro2) 
+
+ //every devuelve un nuevo array con elementos que cumplan la condicion dada como referencia
+ let filtro3= productos.every(product=> product.precio<200)
+ console.log(filtro3) 
+
+ // concat para unir dos  arraglos
+ let filtro4= productos.concat(carrito)
+ console.log(filtro4) 
