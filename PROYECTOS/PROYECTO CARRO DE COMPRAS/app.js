@@ -15,6 +15,8 @@ Carritoinit()
 
 function Carritoinit(){
   listacursos.addEventListener("click", agregarcursos)
+  carrito.addEventListener("click",Eliminarcursos)
+  limpiarcarrito.addEventListener("click",limpiarCarrito)
 
 } 
 
@@ -31,8 +33,25 @@ function agregarcursos(e){
 }
 
 
+function Eliminarcursos(e){
+  if(e.target.classList.contains("borrar-curso")){
+  let cursoId=e.target.getAttribute("data-id")
+   // para eliminar los cursos del carrito por data-id
+  carritodecompras=carritodecompras.filter(curso=> curso.id !==cursoId) 
+
+  mostarArticulos()
 
 
+
+
+
+  }
+}
+
+function  limpiarCarrito(){
+  carritodecompras=[] // para formaterar el array de carritodecompras
+  Limpiarhtml()
+}
 
 // Funciones auxiliares
 /*
@@ -50,9 +69,25 @@ function leerDatosCursos(curso){
        id:curso.querySelector("a").getAttribute("data-id"),
        cantidad:1
       }
+    // ver si el elemeto ya existe en el carrito para  no agregar si no aumentar  la cantidad
+    let cursoExiste=carritodecompras.some(curso=>curso.id===infocurso.id);
+    if(cursoExiste){
+      // actualizamos cantidad
+      let cursos=carritodecompras.map(curso=>{
+        if(curso.id===infocurso.id){
+          curso.cantidad++;
+          return curso; // retorna cursos actulizados en cantidad
+        }else{
+          return curso;
+        }
+      })
+      carritodecompras=[...cursos] // retona cursos en la cantidad de uno 
+    }else{
+      
     //agregar al carrito
      carritodecompras=[...carritodecompras,infocurso]
-      
+    }
+
      console.log(carritodecompras)
      mostarArticulos();
   }  
@@ -67,9 +102,15 @@ function leerDatosCursos(curso){
    // limpia el html visible
     Limpiarhtml()
     // recorre el arreglo y genera el html
-      carritodecompras.forEach((curso)=>{
+      carritodecompras.forEach((curso)=>{ 
+       const {image,titulo,precio,cantidad,id}= curso;
           let articulo=document.createElement("tr")
-          articulo.innerHTML=`<td>${curso.titulo}</td>`
+          articulo.innerHTML=`
+          <img src="${image}" width="100">
+          <td>${titulo}</td> 
+          <td>${precio}</td> 
+          <td>${cantidad}<td>
+          <a class="borrar-curso" data-id="${id}">x</a>`
       
         contendorcarrito.appendChild(articulo); //agrega al carrito
       })
