@@ -53,22 +53,23 @@ document.addEventListener("DOMContentLoaded",()=>{
    })
    precioMin.addEventListener('change',(e)=>{
     datosBusqueda.precioMin=e.target.value
+    filtarAuto()
    })
    precioMax.addEventListener('change',(e)=>{
     datosBusqueda.precioMax=e.target.value
- 
+    filtarAuto()
    })
    puertas.addEventListener('change',(e)=>{
     datosBusqueda.puertas=e.target.value
-  
+    filtarAuto()
    })
    transmision.addEventListener('change',(e)=>{
     datosBusqueda.transmision=e.target.value
-   
+    filtarAuto()
    })
    color.addEventListener('change',(e)=>{
     datosBusqueda.color=e.target.value
-    
+    filtarAuto()
    }) 
 
 console.log(datosBusqueda)
@@ -104,9 +105,14 @@ autos.forEach( auto=>{
 }
 function filtarAuto(){
     // funcion de criterios de busqueda por item
-    const resultado=autos.filter(fiLtrarMarca).filter(filtarYear)
+    const resultado=autos.filter(fiLtrarMarca).filter(filtarYear).filter(filtarPreciomin).filter(filtarPreciomax).filter(filtarNpuertas).filter(fiLtrarTrasmision).filter(fiLtrarCOLOR)
     console.log(resultado) 
+   if(resultado.length){
     mostarAutos(resultado)
+   }else{
+   noResultado()
+   }
+    
    } 
 
 
@@ -136,4 +142,55 @@ function limpiarHtml(){
   while(resultado.firstChild){
      resultado.removeChild(resultado.firstChild);
   }
+}
+
+function filtarPreciomin(auto){
+  const {precioMin}= datosBusqueda
+  if(precioMin){
+    return auto.precio >= precioMin
+  }
+  return auto;
+} 
+
+
+function filtarPreciomax(auto){
+  const {precioMax}= datosBusqueda
+  if(precioMax){
+    return auto.precio >= precioMax
+  }
+  return auto;
+}  
+function filtarNpuertas(auto){
+  // recordar convertir los datos del input a un entero siempre para poder comparar
+      const {puertas}= datosBusqueda
+      if(puertas){
+        return auto.puertas === Number(puertas)
+      }
+      return auto;
+  }  
+
+function fiLtrarTrasmision(auto){ 
+  // funcion par afiltrar autos por marca
+     const {transmision}= datosBusqueda
+    if(transmision){
+      return auto.transmision === transmision
+    }
+    return auto;
+  }
+function fiLtrarCOLOR(auto){ 
+  // funcion par afiltrar autos por marca
+     const {color}= datosBusqueda
+    if(color){
+      return auto.color === color
+    }
+    return auto;
+  } 
+
+function noResultado(){
+limpiarHtml()
+// estas lineas crean la alarta y la asingnan despues del resultado
+  const noResultado=document.createElement("div");
+  resultado.classList.add("alert","error","Text-center")
+  noResultado.textContent="No hay resultados por esos para metros ingrese nuevos"
+  resultado.appendChild(noResultado)
 }

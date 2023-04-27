@@ -68,4 +68,9 @@ form {
 }
 .sitio-web:hover {
     color: white;
+} 
+
+.Text-center{
+text-align: center;
+color: white;
 }
