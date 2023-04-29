@@ -41,3 +41,10 @@ const convertidor=JSON.parse(productos2)
 productos2.descuento=15
 Memoriacorta.setItem("producto2",JSON.stringify(productos2))
 
+let array=[1,2,3,45,6] 
+
+let nueva= array.forEach(Element=> console.log(Element))
+
+for(let i=0; i<array.length; i++){
+  console.log(i)
+}
