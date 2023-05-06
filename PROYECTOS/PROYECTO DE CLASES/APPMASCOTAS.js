@@ -6,7 +6,7 @@ const inputfecha = document.querySelector("#fecha");
 const inputhora = document.querySelector("#hora");
 const inputsintomas = document.querySelector("#sintomas");
 const formulario = document.querySelector("#nuevascita");
-const citas = document.querySelector("#citas");
+const contenedordecitas = document.querySelector("#citas");
 
 initapp();
 
@@ -24,7 +24,13 @@ const citaobj = {
 
 class Citas {
   constructor() {
-    this.cita = [];
+    this.citas = [];
+  }
+  agregarCitas(cita) {
+    this.citas = [...this.citas, cita];
+  }
+  eliminarCitas(id) {
+    this.citas= this.citas.filter(cita => cita.id!==id)
   }
 }
 
@@ -47,10 +53,47 @@ class interfaz {
       alerta.remove();
     }, 3000);
   }
+  mostarcita({citas}){
+
+  console.log(citas)
+  this.limpiarHtml()
+    citas.forEach(cita => {
+      const {mascota, propietario, telefono, fecha, hora, sintomas,id }=cita 
+      const divCita=document.createElement("div")
+      divCita.classList.add("cita","p-3")
+      divCita.dataset.id = id 
+
+      //agregar eleemtos a una card
+      const mascotaCard=`<div class="card" style="width: 18rem;">
+      <div class="card-header">
+         <h2>${mascota}<h2>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">${propietario}</li>
+        <li class="list-group-item">${telefono}</li>
+        <li class="list-group-item">${fecha}</li>
+        <li class="list-group-item">${hora}</li>
+        <li class="list-group-item">${sintomas}</li>
+        <li class="list-group-item"><button class="btn btn-danger text-center  h3" onclick="eliminarCard(${id})">x</button><button class="btn btn-success text-center h3 mx-5">➕</button></li>
+      </ul>
+     
+    </div>`
+
+      divCita.innerHTML=mascotaCard
+      contenedordecitas.appendChild(divCita);
+
+    });
+  
+  } 
+  limpiarHtml(){
+    while( contenedordecitas.firstChild){
+      contenedordecitas.removeChild(contenedordecitas.firstChild);
+    }
+  }
 }
 
-const Agendarcita= new Citas()
-const UIusers= new interfaz()
+const Agendarcita = new Citas();
+const UIusers = new interfaz();
 // funcion ejecutadora de eventos
 
 function initapp() {
@@ -71,7 +114,6 @@ function initapp() {
 function datosCita(e) {
   //para llenar objeto con  el atributo name
   citaobj[e.target.name] = e.target.value;
-  console.log(citaobj);
 }
 
 function NuevaCita(e) {
@@ -91,4 +133,32 @@ function NuevaCita(e) {
 
     return;
   }
+
+  //generar un id
+  citaobj.id = Date.now();
+  // agregar una cita a la clase agendarcita
+  Agendarcita.agregarCitas({ ...citaobj });
+  reinicarObjeto();
+  formulario.reset();
+
+  UIusers.mostarcita(Agendarcita)
+}
+
+function reinicarObjeto() {
+  citaobj.mascota = "";
+  citaobj.propietario = "";
+  citaobj.telefono = "";
+  citaobj.fecha = "";
+  citaobj.hora = "";
+  citaobj.sintomas = "";
+}
+
+function eliminarCard(id){
+
+ //eliminar cita
+ Agendarcita.eliminarCitas(id);
+// MOSTRAR MESAJE DE ELIMINACION
+ UIusers.mostarAlerta("Cita eliminada");
+// LISTAR NUEVAMENTE EL ARRAY
+  UIusers.mostarcita( Agendarcita)
 }
