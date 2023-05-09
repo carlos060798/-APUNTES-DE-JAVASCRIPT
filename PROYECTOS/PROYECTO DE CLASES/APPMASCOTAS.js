@@ -214,6 +214,7 @@ function eliminarCard(id) {
 }
 
 function editarCard(cita) {
+  console.log(cita)
   // para listar  los datos  a  editar en el form
   const { mascota, propietario, telefono, fecha, hora, sintomas,id } = cita;
   inputnombre.value = mascota;
