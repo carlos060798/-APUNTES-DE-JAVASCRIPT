@@ -25,6 +25,8 @@ function consultaApi(ciudad,pais){
   // llamados dl api
   const appId="fbe02affa6fae184698b24480915c66a" // llave para aceder por id
   const url=`http://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appId}` // url del api
+ 
+ Spiner() // ESPERAR CARGA DEL LLAMADO DEL API
   fetch(url).then(response => response.json())
   .then(datos => {
   limpiarHtml()
@@ -115,4 +117,27 @@ function limpiarHtml(){
 
 function convertirGrados(grados){
  return parseInt(grados-273.15)
+} 
+
+//funcion spiner
+
+function Spiner(){
+  limpiarHtml()
+const spiner=document.createElement("div");
+ spiner.classList.add("sk-fading-circle");
+ spiner.innerHTML=`
+  <div class="sk-circle1 sk-circle"></div>
+  <div class="sk-circle2 sk-circle"></div>
+  <div class="sk-circle3 sk-circle"></div>
+  <div class="sk-circle4 sk-circle"></div>
+  <div class="sk-circle5 sk-circle"></div>
+  <div class="sk-circle6 sk-circle"></div>
+  <div class="sk-circle7 sk-circle"></div>
+  <div class="sk-circle8 sk-circle"></div>
+  <div class="sk-circle9 sk-circle"></div>
+  <div class="sk-circle10 sk-circle"></div>
+  <div class="sk-circle11 sk-circle"></div>
+  <div class="sk-circle12 sk-circle"></div>
+ `
+ respuesta.appendChild(spiner)
 }
