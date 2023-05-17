@@ -3,13 +3,19 @@ const paginacionDiv = document.querySelector("#paginacion");
 const formulario = document.querySelector("#form");
 console.log(resultado);
 
+//variables para la paginacion 
+
+const registrosPagina=40 
+let  totalPaginas;
+let iterador;
+let paginainicial=1;
 //EVENTOS DE PAGINA
 
 window.onload = () => {
-  formulario.addEventListener("submit", cosultarApi);
+  formulario.addEventListener("submit", validarformulario);
 };
 
-function cosultarApi(e) {
+function validarformulario(e) {
   e.preventDefault();
   console.log("cosultar");
   const termino = document.querySelector("#term").value;
@@ -18,21 +24,42 @@ function cosultarApi(e) {
     mensajealerta("campos vacios");
     return;
   }
-  Buscarimagenes(termino);
+  Buscarimagenes();
 }
 
 //funcion de consultar API
 
-function Buscarimagenes(palabra) {
+function Buscarimagenes() {
   const key = "36463902-f0804003049f9d54a40d1596b";
-  const url = `https://pixabay.com/api/?key=${key}&q=${palabra}&per_page=100`;
+  const palabra = document.querySelector("#term").value;
+  const url = `https://pixabay.com/api/?key=${key}&q=${palabra}&per_page=${registrosPagina}&page=${paginainicial}`;
 
   fetch(url)
     .then((respusta) => respusta.json())
-    .then((respuesta) => mostraimagen(respuesta.hits));
+    .then((respuesta) => {
+      console.log(respuesta)
+      totalPaginas =  PaginacionImg( respuesta.totalHits) // muestra las imagenes
+      console.log(totalPaginas)
+      mostraimagen(respuesta.hits)
+      
+    });
+} 
+//generrador de paginacion que determina cuando dar el salto ala siguinete
+
+
+function *crearpaginador(total) {
+  for(let i=1; i<=total; i++) {
+    yield i; //para registrar el valor del iterador
+  }
 }
 
+// funcion para hacer la paginacion  
+function PaginacionImg(total) {
+return parseInt(Math.ceil(total/registrosPagina))
+
+}
 //funciones auxilirares
+
 function mensajealerta(mensaje) {
   const alerta = document.querySelector(".bg-red-100");
   if (!alerta) {
@@ -91,5 +118,40 @@ function mostraimagen(imagenes) {
     </div>
     </div>
     `;
-  });
+  }); 
+//limpiando el html de paginadores anteriores en nueva consulta
+
+ while(paginacionDiv.firstChild){
+  paginacionDiv.removeChild(paginacionDiv.firstChild);
+ }
+
+ //para crear la paginacion de imagenes una vez creadas en el htl
+
+ imprimiriterador()
+}
+
+
+function imprimiriterador(){
+  iterador=crearpaginador(totalPaginas)
+ // forma de activar el iterador
+ while(true) {
+ // activa el iterador
+ const {value,done}=iterador.next()
+ if(done) return; // evalua si se llego al final del carge de documentos
+ // si no se esta en el final se genera un boton por cada paginacion 
+
+ const buton=document.createElement("a")
+ buton.href="#"
+ buton.dataset.pagina=value 
+ buton.textContent=value 
+ buton.classList.add('siguiente', 'bg-yellow-400', 'px-4', 'py-1', 'mr-2', 'mx-auto', 'mb-10', 'font-bold', 'uppercase', 'rounded')
+ buton.onclick=()=>{
+  paginainicial=value
+  // se vuele a consultar la api nueavemente con la pagina actual
+
+  Buscarimagenes()
+ }
+ 
+ paginacionDiv.appendChild(buton)
+}
 }
